@@ -3,8 +3,10 @@ const mongoose = require("mongoose");
 const authRoutes = require("./routes/authRoutes");
 const cookieParser = require("cookie-parser");
 const { requireAuth, checkUser } = require("./middleware/authMiddleware");
+const dotenv = require("dotenv");
 
 const app = express();
+dotenv.config({ path: "./config.env" });
 
 // middleware
 app.use(express.static("public"));
@@ -15,8 +17,7 @@ app.use(cookieParser()); // to access cookie method in response object
 app.set("view engine", "ejs");
 
 // database connection
-const dbURI =
-  "mongodb+srv://aleksandro:gzF2lzgI0EYtTF4b@cluster0.41krbbu.mongodb.net/node-auth?retryWrites=true&w=majority";
+const dbURI = process.env.MONGO_URL;
 mongoose
   .connect(dbURI, {
     useNewUrlParser: true,
@@ -25,7 +26,7 @@ mongoose
   })
   .then((result) => {
     console.log("connected to db");
-    app.listen(3000);
+    app.listen(3004);
   })
   .catch((err) => console.log(err));
 
